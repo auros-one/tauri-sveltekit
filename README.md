@@ -1,38 +1,233 @@
-# create-svelte
+# Creating a destop application with Tauri and SvelteKit
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The resulting example code of this tutorial is available on [Github](https://github.com/Stijn-B/tauri-sveltekit-example)
 
-## Creating a project
+[**Tauri**](https://tauri.app/) is a framework for building tiny, blazing fast binaries for all major desktop platforms. Developers can integrate any front-end framework that compiles to HTML, JS and CSS for building their user interface. Tauri places a great emphasis on [security](https://tauri.app/v1/guides/development/security). You can check out how the Tauri architecture works and get a grasp on how the different components integrate [here](https://tauri.app/v1/guides/architecture/).
 
-If you're seeing this, you've probably already done this step. Congrats!
+[**SvelteKit**](https://kit.svelte.dev/) is an application framework powered by Svelte which applies a new a new approach to building user interfaces. Whereas traditional frameworks like React and Vue do the bulk of their work in the browser, Svelte shifts that work into a compile step that happens when you build your app. Instead of using techniques like virtual DOM diffing, Svelte writes code that surgically updates the DOM when the state of your app changes which results in better performance.
 
-```bash
-# create a new project in the current directory
-npm init svelte
+## Step 0: Prerequisites
 
-# create a new project in my-app
-npm init svelte my-app
+Make sure you have all [Tauri prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) set up.
+
+## Step 1: Setup SvelteKit project
+
+Create a SvelteKit project and proceed through the prompts to set it up.
+
+```shell
+npm init svelte tauri-sveltekit
+cd tauri-sveltekit
+npm install
 ```
 
-## Developing
+Alternatively, you can use one of your existing SvelteKit projects.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Setup adapter-static
 
-```bash
-npm run dev
+Tauri looks for static files to display in its WebView. SvelteKit has the [@sveltejs/adapter-static adapter](https://kit.svelte.dev/docs/adapters#supported-environments-static-sites) to build static websites.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+Install the adapter with:
+
+```shell
+npm install -D @sveltejs/adapter-static@next
 ```
 
-## Building
+Set up the new adapter in `svelte.config.js`:
 
-To create a production version of your app:
+```javascript
+import adapter from '@sveltejs/adapter-static';  // <-- adapter-static replaces adapter-auto
+import preprocess from 'svelte-preprocess';
 
-```bash
-npm run build
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+	preprocess: preprocess(),
+
+	kit: {  // some settings for adapter-static:
+		adapter: adapter({
+			pages: 'build',
+			assets: 'build',
+			fallback: 'index.html'
+		}),
+	}
+};
+
+export default config;
 ```
 
-You can preview the production build with `npm run preview`.
+Uninstall the old adapter with:
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```shell
+npm uninstall -D @sveltejs/adapter-auto
+```
+
+### Disable server-side rendering (SSR)
+
+To disable server side rendering create a `src/hooks.js` file:
+```javascript
+/** @type {import('@sveltejs/kit').Handle} */
+export async function handle({ event, resolve }) {
+    return resolve(event, { ssr: false });
+}
+```
+
+## Step 2: Add Tauri CLI
+
+[Tauri CLI](https://tauri.app/v1/api/cli/) is for building and bundeling your app. It's the part of Tauri that turns your website (SvelteKit project) into a desktop app.
+
+At the root of you SvelteKit project, add the Tauri CLI as a developer dependency:
+
+```shell
+npm install -D @tauri-apps/cli
+```
+
+Add a Tauri script to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "tauri": "tauri"
+  }
+}
+```
+
+## Step 3: Initialise Tauri
+
+Initialise Tauri with `npm tauri init`. When proceeding through the prompts, set the web assets location to `../build` and the url of the dev server to `http://localhost:3000` (the default SvelteKit development server).
+
+```shell
+npm tauri init
+> What is your app name? › tauri-sveltekit
+> What should the window title be? (tauri-sveltekit) › tauri-sveltekit
+> Where are your web assets (HTML/CSS/JS) located, relative to the "<current dir>/src-tauri/tauri.conf.json" file that will be created? (../public) › ../build <-- Change the default location to ../build
+> What is the url of your dev server? › http://localhost:3000 <-- Change the port to 3000
+```
+
+If you want to change any of these settings afterwards, they are available in `src-tauri/tauri.conf.json`
+
+### Optional: Using another port
+
+You can also use another port. Just point the Tauri devPath to the SvelteKit development server.
+
+Set the Tauri devPath in `src-tauri/tauri.conf.json`:
+```json
+{
+  "build": {
+    "devPath": "http://localhost:YOUR_PREFERRED_PORT"
+  }
+}
+```
+
+Set the SvelteKit development server port in `package.json`:
+```json
+{
+  "scripts": {
+    "dev": "svelte-kit dev -p YOUR_PREFERRED_PORT"
+  }
+}
+```
+
+### Setup Tauri `before` commands
+
+SvelteKit should always start it's dev server or build it's production site before Tauri. Tauri provides an easy way to do this with the `beforeDevCommand` and `beforeBuildCommand`. Update both in `src-tauri/tauri.conf.json`:
+
+```json
+{
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev"
+  }
+}
+```
+
+### Sumarry
+
+If you followed all steps your `build` settings in `src-tauri/tauri.conf.json` should like like this:
+
+```json
+{
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:3000",
+    "distDir": "../build"
+  }
+}
+```
+
+## Step 4: Optional: Add Tauri API
+
+While the previously added [Tauri CLI](https://tauri.app/v1/api/cli/) is for building and bundeling your app, the [Tauri API](https://tauri.app/v1/api/js/) is for adding backend functionality. This API is optional since you won't need it if you're just rendering UI and communicating with a remote server. However, once you want to add backend functionality that isn't available in standard browsers you will probably need it.
+
+Examples of this backend functionality are:
+- [Calling any custom command (which you define)](https://tauri.app/v1/api/js/modules/tauri#invoke)
+- [Access to the file system (reading and writing files)](https://tauri.app/v1/api/js/modules/fs)
+- [Read and write to the system clipboard](https://tauri.app/v1/api/js/modules/clipboard)
+
+Add the the Tauri API to your project with:
+```
+npm install @tauri-apps/api
+```
+
+Note that contrast to the CLI this isn't a developer dependency because it's not only a build-stage requirement but a production requirement.
+
+### `allowlist`
+
+To improve security, Tauri only allows backend API calls that are allowlisted in `src-tauri/tauri.conf.json`. 
+
+For example the file system API can be allowlisted in `src-tauri/tauri.conf.json` like this:
+
+```json
+{
+  "tauri": {
+    "allowlist": {
+      "fs": {
+        "all": true, // enable all FS APIs
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true
+      }
+    }
+  }
+}
+```
+
+## Step 5: Run or build Tauri app
+
+### Run Tauri app
+
+```shell
+npm run tauri dev
+```
+
+The first time you run the Tauri app it will generate a `Cargo.lock` file. It's purpose is *to describe the state of the world at the time of a successful build* and you should add it to your version control ([source](https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries)).
+
+### Build Tauri app
+
+To build your Tauri app you must specify its identifier in reverse domain name notation (e.g. com.tauri.example). This string must be unique across applications and contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). 
+
+Set your application identifier in `src-tauri/tauri.conf.json`:
+
+```json
+{
+    "tauri": {
+        "bundle": {
+            "identifier": "com.example.my-tauri-app"
+        }
+    }
+}
+```
+
+Then build your app with:
+
+```shell
+npm run tauri build
+```
+
+It will detect your operating system and build a bundle accordingly. The result will be located in `src-tauri/target/release`.
+
+For more information about building applications for different platforms check out [the official documentation](https://tauri.app/v1/guides/building/)
