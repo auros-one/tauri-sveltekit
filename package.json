@@ -12,11 +12,11 @@
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
 		"format": "prettier --write --plugin-search-dir=. .",
-        "tauri": "tauri"
+		"tauri": "tauri"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.22.2",
-		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-static": "^1.0.0-next.34",
 		"@sveltejs/kit": "next",
 		"@tauri-apps/cli": "^1.0.0",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
