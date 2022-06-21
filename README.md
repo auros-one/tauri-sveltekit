@@ -1,4 +1,4 @@
-# Creating a destop application with Tauri and SvelteKit
+# Creating a desktop application with Tauri and SvelteKit
 
 The resulting example code of this tutorial is available on [Github](https://github.com/Stijn-B/tauri-sveltekit-example)
 
