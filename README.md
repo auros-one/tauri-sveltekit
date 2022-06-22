@@ -1,10 +1,10 @@
-# Creating a destop application with Tauri and SvelteKit
+# Creating a desktop application with Tauri and SvelteKit
 
 The resulting example code of this tutorial is available on [Github](https://github.com/Stijn-B/tauri-sveltekit-example)
 
 [**Tauri**](https://tauri.app/) is a framework for building tiny, blazing fast binaries for all major desktop platforms. Developers can integrate any front-end framework that compiles to HTML, JS and CSS for building their user interface. Tauri places a great emphasis on [security](https://tauri.app/v1/guides/development/security). You can check out how the Tauri architecture works and get a grasp on how the different components integrate [here](https://tauri.app/v1/guides/architecture/).
 
-[**SvelteKit**](https://kit.svelte.dev/) is an application framework powered by Svelte which applies a new a new approach to building user interfaces. Whereas traditional frameworks like React and Vue do the bulk of their work in the browser, Svelte shifts that work into a compile step that happens when you build your app. Instead of using techniques like virtual DOM diffing, Svelte writes code that surgically updates the DOM when the state of your app changes which results in better performance.
+[**SvelteKit**](https://kit.svelte.dev/) is an application framework powered by Svelte which applies a new approach to building user interfaces. Whereas traditional frameworks like React and Vue do the bulk of their work in the browser, Svelte shifts that work into a compile step that happens when you build your app. Instead of using techniques like virtual DOM diffing, Svelte writes code that surgically updates the DOM when the state of your app changes which results in better performance.
 
 ## Step 0: Prerequisites
 
@@ -139,9 +139,9 @@ SvelteKit should always start it's dev server or build it's production site befo
 }
 ```
 
-### Sumarry
+### Summary
 
-If you followed all steps your `build` settings in `src-tauri/tauri.conf.json` should like like this:
+If you followed all steps then the `build` settings in `src-tauri/tauri.conf.json` should look like this:
 
 ```json
 {
@@ -156,11 +156,11 @@ If you followed all steps your `build` settings in `src-tauri/tauri.conf.json` s
 
 ## Step 4: Optional: Add Tauri API
 
-While the previously added [Tauri CLI](https://tauri.app/v1/api/cli/) is for building and bundeling your app, the [Tauri API](https://tauri.app/v1/api/js/) is for adding backend functionality. This API is optional since you won't need it if you're just rendering UI and communicating with a remote server. However, once you want to add backend functionality that isn't available in standard browsers you will probably need it.
+While the previously added [Tauri CLI](https://tauri.app/v1/api/cli/) handles building and bundeling your app, the [Tauri API](https://tauri.app/v1/api/js/) adds backend functionality. This API is optional since you won't need it if you're just rendering a static website to communicate with a remote server. However, if you want access to more than a standard browser environment you will need it.
 
-Examples of this backend functionality are:
-- [Calling any custom command (which you define)](https://tauri.app/v1/api/js/modules/tauri#invoke)
-- [Access to the file system (reading and writing files)](https://tauri.app/v1/api/js/modules/fs)
+Tauri API Examples:
+- [Call a custom command (defined in the Rust backend)](https://tauri.app/v1/api/js/modules/tauri#invoke)
+- [Access to the file system (read- and writing files)](https://tauri.app/v1/api/js/modules/fs)
 - [Read and write to the system clipboard](https://tauri.app/v1/api/js/modules/clipboard)
 
 Add the the Tauri API to your project with:
@@ -204,11 +204,11 @@ For example the file system API can be allowlisted in `src-tauri/tauri.conf.json
 npm run tauri dev
 ```
 
-The first time you run the Tauri app it will generate a `Cargo.lock` file. It's purpose is *to describe the state of the world at the time of a successful build* and you should add it to your version control ([source](https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries)).
+The first time you run the Tauri app it will generate a `Cargo.lock` file. It's purpose is *"to describe the state of the world at the time of a successful build"* and you should add it to your version control ([source](https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries)).
 
 ### Build Tauri app
 
-To build your Tauri app you must specify its identifier in reverse domain name notation (e.g. com.tauri.example). This string must be unique across applications and contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). 
+To build your Tauri app you must specify its identifier in reverse domain name notation (e.g. `com.tauri.my-tauri-app`). This string must be unique across applications and contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). 
 
 Set your application identifier in `src-tauri/tauri.conf.json`:
 
