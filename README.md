@@ -234,6 +234,25 @@ For more information about building applications for different platforms check o
 
 ## Extra
 
+### Removing the Menu Bar
+
+The generated Tauri project contains a menu bar. To remove it, delete the `.menu` parameter from the Tauri builder in `src-tauri/main.rs`:
+
+```rust
+#![cfg_attr(
+  all(not(debug_assertions), target_os = "windows"),
+  windows_subsystem = "windows"
+)]
+
+fn main() {
+  let context = tauri::generate_context!();
+  tauri::Builder::default()
+    // .menu(tauri::Menu::os_default(&context.package_info().name)) <-- remove this line
+    .run(context)
+    .expect("error while running tauri application");
+}
+```
+
 ### Styling with TailwindCSS
 
 It's possible to add [TailwindCSS](https://tailwindcss.com/) to the SvelteKit project by following the steps outlined [here in the TailwindCSS docs](https://tailwindcss.com/docs/guides/sveltekit). The resulting example project is available [here](https://github.com/Stijn-B/tauri-sveltekit-tailwindcss-example).
