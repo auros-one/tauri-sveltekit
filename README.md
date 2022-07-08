@@ -231,3 +231,9 @@ npm run tauri build
 It will detect your operating system and build a bundle accordingly. The result will be located in `src-tauri/target/release`.
 
 For more information about building applications for different platforms check out [the official documentation](https://tauri.app/v1/guides/building/)
+
+## Extra
+
+### Styling with TailwindCSS
+
+It's possible to add [TailwindCSS](https://tailwindcss.com/) to the SvelteKit project by following the steps outlined [here in the TailwindCSS docs](https://tailwindcss.com/docs/guides/sveltekit). The resulting example project is available [here](https://github.com/Stijn-B/tauri-sveltekit-tailwindcss-example).
