@@ -2,8 +2,8 @@
 	"name": "tauri-sveltekit",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "svelte-kit dev",
-		"build": "svelte-kit build",
+        "dev": "npm run tauri dev",
+		"build": "npm run tauri build",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
 		"prepare": "svelte-kit sync",
@@ -12,6 +12,8 @@
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
 		"format": "prettier --write --plugin-search-dir=. .",
+        "sveltekit:dev": "svelte-kit dev",
+		"sveltekit:build": "svelte-kit build",
 		"tauri": "tauri"
 	},
 	"devDependencies": {

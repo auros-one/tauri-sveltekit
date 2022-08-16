@@ -70,6 +70,19 @@ export async function handle({ event, resolve }) {
 }
 ```
 
+### Create a sveltekit scripts
+
+Add the following SvelteKit scripts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "sveltekit:dev": "svelte-kit dev",
+    "sveltekit:build": "svelte-kit build",
+  }
+}
+```
+
 ## Step 2: Add Tauri CLI
 
 [Tauri CLI](https://tauri.app/v1/api/cli/) is for building and bundeling your app. It's the part of Tauri that turns your website (SvelteKit project) into a desktop app.
@@ -80,17 +93,19 @@ At the root of you SvelteKit project, add the Tauri CLI as a developer dependenc
 npm install -D @tauri-apps/cli
 ```
 
-Add a Tauri script to your `package.json`:
+Add a Tauri script and update the dev and build script in your `package.json`:
 
 ```json
 {
   "scripts": {
-    "tauri": "tauri"
+    "dev": "npm run tauri dev",
+    "build": "npm run tauri build",
+    "tauri": "tauri",
   }
 }
 ```
 
-## Step 3: Initialise Tauri
+## Step 3: Setup Tauri
 
 Initialise Tauri with `npm tauri init`. When proceeding through the prompts, set the web assets location to `../build` and the url of the dev server to `http://localhost:3000` (the default SvelteKit development server).
 
@@ -104,9 +119,46 @@ npm tauri init
 
 If you want to change any of these settings afterwards, they are available in `src-tauri/tauri.conf.json`
 
+### Setup Tauri `before` commands
+
+SvelteKit should always start it's dev server or build it's production site before Tauri. Tauri provides an easy way to do this with the `beforeDevCommand` and `beforeBuildCommand`. Update both in `src-tauri/tauri.conf.json`:
+
+```json
+{
+  "build": {
+    "beforeBuildCommand": "npm run sveltekit:build",
+    "beforeDevCommand": "npm run sveltekit:dev"
+  }
+}
+```
+
+### Resulting tauri.conf
+
+If you followed all steps then the `build` settings in `src-tauri/tauri.conf.json` should look like this:
+
+```json
+{
+  "build": {
+    "beforeBuildCommand": "npm run sveltekit:build",
+    "beforeDevCommand": "npm run sveltekit:dev",
+    "devPath": "http://localhost:3000",
+    "distDir": "../build"
+  }
+}
+```
+
 ### Optional: Using another port
 
-You can also use another port. Just point the Tauri devPath to the SvelteKit development server.
+You can choose the port on which the SvelteKit website is hosted during local development. Just point the Tauri devPath to the SvelteKit development server.
+
+Set the SvelteKit development server port in `package.json`:
+```json
+{
+  "scripts": {
+    "sveltekit": "svelte-kit dev -p YOUR_PREFERRED_PORT"
+  }
+}
+```
 
 Set the Tauri devPath in `src-tauri/tauri.conf.json`:
 ```json
@@ -117,42 +169,6 @@ Set the Tauri devPath in `src-tauri/tauri.conf.json`:
 }
 ```
 
-Set the SvelteKit development server port in `package.json`:
-```json
-{
-  "scripts": {
-    "dev": "svelte-kit dev -p YOUR_PREFERRED_PORT"
-  }
-}
-```
-
-### Setup Tauri `before` commands
-
-SvelteKit should always start it's dev server or build it's production site before Tauri. Tauri provides an easy way to do this with the `beforeDevCommand` and `beforeBuildCommand`. Update both in `src-tauri/tauri.conf.json`:
-
-```json
-{
-  "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev"
-  }
-}
-```
-
-### Summary
-
-If you followed all steps then the `build` settings in `src-tauri/tauri.conf.json` should look like this:
-
-```json
-{
-  "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
-    "devPath": "http://localhost:3000",
-    "distDir": "../build"
-  }
-}
-```
 
 ## Step 4: Optional: Add Tauri API
 
@@ -201,7 +217,7 @@ For example the file system API can be allowlisted in `src-tauri/tauri.conf.json
 ### Run Tauri app
 
 ```shell
-npm run tauri dev
+npm run dev
 ```
 
 The first time you run the Tauri app it will generate a `Cargo.lock` file. It's purpose is *"to describe the state of the world at the time of a successful build"* and you should add it to your version control ([source](https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries)).
@@ -225,7 +241,7 @@ Set your application identifier in `src-tauri/tauri.conf.json`:
 Then build your app with:
 
 ```shell
-npm run tauri build
+npm run build
 ```
 
 It will detect your operating system and build a bundle accordingly. The result will be located in `src-tauri/target/release`.
