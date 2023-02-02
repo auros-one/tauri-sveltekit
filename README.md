@@ -6,16 +6,18 @@ The resulting example code of this tutorial is available on [Github](https://git
 
 [**SvelteKit**](https://kit.svelte.dev/) is an application framework powered by Svelte which applies a new approach to building user interfaces. Whereas traditional frameworks like React and Vue do the bulk of their work in the browser, Svelte shifts that work into a compile step that happens when you build your app. Instead of using techniques like virtual DOM diffing, Svelte writes code that surgically updates the DOM when the state of your app changes which results in better performance.
 
+
 ## Step 0: Prerequisites
 
 Make sure you have all [Tauri prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) set up.
+
 
 ## Step 1: Setup SvelteKit project
 
 Create a SvelteKit project and proceed through the prompts to set it up.
 
 ```shell
-npm init svelte tauri-sveltekit
+npm create svelte@latest tauri-sveltekit
 cd tauri-sveltekit
 npm install
 ```
@@ -40,7 +42,7 @@ import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	preprocess: preprocess(),
+    preprocess: preprocess(),
 
 	kit: {  // some settings for adapter-static:
 		adapter: adapter({
@@ -62,15 +64,15 @@ npm uninstall -D @sveltejs/adapter-auto
 
 ### Disable server-side rendering (SSR)
 
-To disable server side rendering create a `src/hooks.js` file:
+To disable server side rendering create the following `src/+layout.js` file:
 ```javascript
-/** @type {import('@sveltejs/kit').Handle} */
-export async function handle({ event, resolve }) {
-    return resolve(event, { ssr: false });
-}
+export const prerender = true
+export const ssr = false;
 ```
 
-### Create a sveltekit scripts
+([more info](https://kit.svelte.dev/docs/page-options#ssr))
+
+### Create sveltekit scripts
 
 Add the following SvelteKit scripts to your `package.json`:
 
@@ -82,6 +84,7 @@ Add the following SvelteKit scripts to your `package.json`:
   }
 }
 ```
+
 
 ## Step 2: Add Tauri CLI
 
@@ -105,62 +108,46 @@ Add a Tauri script and update the dev and build script in your `package.json`:
 }
 ```
 
+
 ## Step 3: Setup Tauri
 
-Initialise Tauri with `npm tauri init`. When proceeding through the prompts, set the web assets location to `../build` and the url of the dev server to `http://localhost:3000` (the default SvelteKit development server).
+Initialise Tauri with `npm run tauri init`. When proceeding through the prompts, update some of the suggested settings to match the SvelteKit dev server and build output.
 
 ```shell
 npm tauri init
 > What is your app name? › tauri-sveltekit
-> What should the window title be? (tauri-sveltekit) › tauri-sveltekit
+> What should the window title be? (tauri-sveltekit) › Tauri x SvelteKit
 > Where are your web assets (HTML/CSS/JS) located, relative to the "<current dir>/src-tauri/tauri.conf.json" file that will be created? (../public) › ../build <-- Change the default location to ../build
-> What is the url of your dev server? › http://localhost:3000 <-- Change the port to 3000
+> What is the url of your dev server? › http://localhost:5173 <-- Change the port to 5173
+> What is your frontend dev command? · npm run sveltekit:dev <-- Update the dev command
+> What is your frontend build command? · npm run sveltekit:build <-- Update the build command
 ```
 
 If you want to change any of these settings afterwards, they are available in `src-tauri/tauri.conf.json`
 
-### Setup Tauri `before` commands
-
-SvelteKit should always start it's dev server or build it's production site before Tauri. Tauri provides an easy way to do this with the `beforeDevCommand` and `beforeBuildCommand`. Update both in `src-tauri/tauri.conf.json`:
-
-```json
-{
-  "build": {
-    "beforeBuildCommand": "npm run sveltekit:build",
-    "beforeDevCommand": "npm run sveltekit:dev"
-  }
-}
-```
-
-### Resulting tauri.conf
-
-If you followed all steps then the `build` settings in `src-tauri/tauri.conf.json` should look like this:
-
-```json
-{
-  "build": {
-    "beforeBuildCommand": "npm run sveltekit:build",
-    "beforeDevCommand": "npm run sveltekit:dev",
-    "devPath": "http://localhost:3000",
-    "distDir": "../build"
-  }
-}
-```
 
 ### Optional: Using another port
 
 You can choose the port on which the SvelteKit website is hosted during local development. Just point the Tauri devPath to the SvelteKit development server.
 
-Set the SvelteKit development server port in `package.json`:
-```json
-{
-  "scripts": {
-    "sveltekit": "svelte-kit dev -p YOUR_PREFERRED_PORT"
-  }
-}
+Set the SvelteKit development server port in `vite.config.js`:
+
+```javascript
+import { sveltekit } from '@sveltejs/kit/vite';
+
+/** @type {import('vite').UserConfig} */
+const config = {
+	plugins: [sveltekit()],
+    server: {
+        port: YOUR_PREFERRED_PORT
+    }
+};
+
+export default config;
 ```
 
 Set the Tauri devPath in `src-tauri/tauri.conf.json`:
+
 ```json
 {
   "build": {
@@ -184,7 +171,7 @@ Add the the Tauri API to your project with:
 npm install @tauri-apps/api
 ```
 
-Note that contrast to the CLI this isn't a developer dependency because it's not only a build-stage requirement but a production requirement.
+Note that in contrast to the CLI, this isn't a developer dependency because it's not only a build-stage and development requirement but also a production requirement.
 
 ### `allowlist`
 
