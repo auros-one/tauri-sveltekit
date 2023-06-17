@@ -42,7 +42,7 @@ import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-    preprocess: preprocess(),
+	preprocess: preprocess(),
 
 	kit: {  // some settings for adapter-static:
 		adapter: adapter({
@@ -79,8 +79,8 @@ Add the following SvelteKit scripts to your `package.json`:
 ```json
 {
   "scripts": {
-    "sveltekit:dev": "svelte-kit dev",
-    "sveltekit:build": "svelte-kit build",
+	"sveltekit:dev": "svelte-kit dev",
+	"sveltekit:build": "svelte-kit build",
   }
 }
 ```
@@ -101,9 +101,9 @@ Add a Tauri script and update the dev and build script in your `package.json`:
 ```json
 {
   "scripts": {
-    "dev": "npm run tauri dev",
-    "build": "npm run tauri build",
-    "tauri": "tauri",
+	"dev": "npm run tauri dev",
+	"build": "npm run tauri build",
+	"tauri": "tauri",
   }
 }
 ```
@@ -138,9 +138,9 @@ import { sveltekit } from '@sveltejs/kit/vite';
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [sveltekit()],
-    server: {
-        port: YOUR_PREFERRED_PORT
-    }
+	server: {
+		port: YOUR_PREFERRED_PORT
+	}
 };
 
 export default config;
@@ -151,7 +151,7 @@ Set the Tauri devPath in `src-tauri/tauri.conf.json`:
 ```json
 {
   "build": {
-    "devPath": "http://localhost:YOUR_PREFERRED_PORT"
+	"devPath": "http://localhost:YOUR_PREFERRED_PORT"
   }
 }
 ```
@@ -182,19 +182,19 @@ For example the file system API can be allowlisted in `src-tauri/tauri.conf.json
 ```json
 {
   "tauri": {
-    "allowlist": {
-      "fs": {
-        "all": true, // enable all FS APIs
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true,
-        "copyFile": true,
-        "createDir": true,
-        "removeDir": true,
-        "removeFile": true,
-        "renameFile": true
-      }
-    }
+	"allowlist": {
+	  "fs": {
+		"all": true, // enable all FS APIs
+		"readFile": true,
+		"writeFile": true,
+		"readDir": true,
+		"copyFile": true,
+		"createDir": true,
+		"removeDir": true,
+		"removeFile": true,
+		"renameFile": true
+	  }
+	}
   }
 }
 ```
@@ -217,11 +217,11 @@ Set your application identifier in `src-tauri/tauri.conf.json`:
 
 ```json
 {
-    "tauri": {
-        "bundle": {
-            "identifier": "com.example.my-tauri-app"
-        }
-    }
+	"tauri": {
+		"bundle": {
+			"identifier": "com.example.my-tauri-app"
+		}
+	}
 }
 ```
 
@@ -250,9 +250,9 @@ The generated Tauri project contains a menu bar. To remove it, delete the `.menu
 fn main() {
   let context = tauri::generate_context!();
   tauri::Builder::default()
-    // .menu(tauri::Menu::os_default(&context.package_info().name)) <-- remove this line
-    .run(context)
-    .expect("error while running tauri application");
+	// .menu(tauri::Menu::os_default(&context.package_info().name)) <-- remove this line
+	.run(context)
+	.expect("error while running tauri application");
 }
 ```
 

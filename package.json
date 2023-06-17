@@ -3,9 +3,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-        "dev": "npm run tauri dev",
-        "build": "npm run tauri build",
-        "tauri": "tauri",
+		"dev": "npm run tauri dev",
+		"build": "npm run tauri build",
+		"tauri": "tauri",
 		"sveltekit:dev": "vite dev",
 		"sveltekit:build": "vite build",
 		"preview": "vite preview",
