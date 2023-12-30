@@ -2,7 +2,7 @@
 # Creating a desktop application with Tauri and SvelteKit
 
 > [!NOTE]  
-> Clone the repository to get the final result of this tutorial.
+> Clone this repository to get the final result of this tutorial.
 
 ## Step 0: Prerequisites
 

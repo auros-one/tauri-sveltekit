@@ -59,6 +59,9 @@ npm run build
 
 ## Manually creating a desktop application with Tauri and SvelteKit
 
+> [!NOTE]  
+> Clone this repository to get the final result of the tutorial.
+
 The [TUTORIAL.md](/TUTORIAL.md) file contains a step-by-step guide on how to manually create a desktop application with Tauri and SvelteKit. It can be a good resource for learning how to Tauri and SvelteKit work together.
 
 ## Extra
