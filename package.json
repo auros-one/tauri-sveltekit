@@ -15,18 +15,18 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "^2.0.3",
-		"@sveltejs/kit": "^1.30.4",
+		"@sveltejs/adapter-static": "^3.0.8",
+		"@sveltejs/kit": "^2.21.2",
 		"@tauri-apps/cli": "^2.0.0",
 		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^8.10.0",
 		"eslint-plugin-svelte": "^2.46.1",
-		"prettier": "^2.8.8",
-		"prettier-plugin-svelte": "^2.10.1",
-		"svelte": "^4.2.20",
+		"prettier": "^3.5.3",
+		"prettier-plugin-svelte": "^3.4.0",
+		"svelte": "^5.33.14",
 		"svelte-check": "^3.8.6",
 		"typescript": "^5.0.0",
-		"vite": "^4.5.14"
+		"vite": "^6.3.5"
 	},
 	"type": "module"
 }
