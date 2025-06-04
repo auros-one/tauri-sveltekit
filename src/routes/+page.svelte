@@ -1,28 +1,26 @@
-<div class="min-h-screen bg-gradient-to-br from-purple-400 to-blue-600 flex items-center justify-center">
-	<div class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8 text-center">
-		<div class="mb-6">
-			<h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to SvelteKit</h1>
-			<p class="text-gray-600 text-lg">
-				A modern web development framework built on Svelte
+<div
+	class="min-h-screen flex items-center justify-center p-4"
+	style="background: linear-gradient(135deg, #acdff0 0%, #ffeec9 50%, #ffdbce 100%);"
+>
+	<div
+		class="max-w-lg w-full bg-white/90 backdrop-blur-sm rounded-lg border border-white/20 p-8 text-center shadow-lg"
+	>
+		<div class="mb-8">
+			<h1 class="text-3xl font-semibold text-gray-900 mb-3">Welcome to Tauri × SvelteKit</h1>
+			<p class="text-gray-700">
+				A powerful desktop app framework combining Rust and modern web tech
 			</p>
 		</div>
-		
-		<div class="space-y-4">
-			<a 
-				href="https://kit.svelte.dev" 
-				class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
-			>
-				Read Documentation
-			</a>
-			
-			<div class="flex justify-center space-x-4 mt-6">
-				<span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+
+		<div class="space-y-6">
+			<div class="flex justify-center flex-wrap gap-2">
+				<span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-md text-sm font-medium">
 					SvelteKit v2
 				</span>
-				<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+				<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-md text-sm font-medium">
 					Vite v6
 				</span>
-				<span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+				<span class="bg-sky-100 text-sky-800 px-3 py-1 rounded-md text-sm font-medium">
 					Tauri v2
 				</span>
 			</div>
