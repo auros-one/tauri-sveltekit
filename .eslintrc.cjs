@@ -1,8 +1,13 @@
 module.exports = {
 	root: true,
 	extends: ['eslint:recommended', 'prettier'],
-	plugins: ['svelte3'],
-	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
+	ignorePatterns: [
+		'src-tauri/target/**',
+		'src-tauri/gen/**',
+		'.svelte-kit/**',
+		'build/**',
+		'node_modules/**'
+	],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020
