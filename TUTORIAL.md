@@ -1,4 +1,3 @@
-
 # Creating a desktop application with Tauri and SvelteKit
 
 > [!NOTE]  
@@ -7,7 +6,6 @@
 ## Step 0: Prerequisites
 
 Make sure you have all [Tauri prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) set up.
-
 
 ## Step 1: Setup SvelteKit project
 
@@ -34,19 +32,20 @@ npm install -D @sveltejs/adapter-static@next
 Set up the new adapter in `svelte.config.js`:
 
 ```javascript
-import adapter from '@sveltejs/adapter-static';  // <-- adapter-static replaces adapter-auto
+import adapter from '@sveltejs/adapter-static'; // <-- adapter-static replaces adapter-auto
 import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: preprocess(),
 
-	kit: {  // some settings for adapter-static:
+	kit: {
+		// some settings for adapter-static:
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
 			fallback: 'index.html'
-		}),
+		})
 	}
 };
 
@@ -62,8 +61,9 @@ npm uninstall -D @sveltejs/adapter-auto
 ### Disable server-side rendering (SSR)
 
 To disable server side rendering create the following `src/+layout.js` file:
+
 ```javascript
-export const prerender = true
+export const prerender = true;
 export const ssr = false;
 ```
 
@@ -75,13 +75,12 @@ Add the following SvelteKit scripts to your `package.json`:
 
 ```json
 {
-  "scripts": {
-	"sveltekit:dev": "svelte-kit dev",
-	"sveltekit:build": "svelte-kit build",
-  }
+	"scripts": {
+		"sveltekit:dev": "svelte-kit dev",
+		"sveltekit:build": "svelte-kit build"
+	}
 }
 ```
-
 
 ## Step 2: Add Tauri CLI
 
@@ -97,14 +96,13 @@ Add a Tauri script and update the dev and build script in your `package.json`:
 
 ```json
 {
-  "scripts": {
-	"dev": "npm run tauri dev",
-	"build": "npm run tauri build",
-	"tauri": "tauri",
-  }
+	"scripts": {
+		"dev": "npm run tauri dev",
+		"build": "npm run tauri build",
+		"tauri": "tauri"
+	}
 }
 ```
-
 
 ## Step 3: Setup Tauri
 
@@ -121,7 +119,6 @@ npm tauri init
 ```
 
 If you want to change any of these settings afterwards, they are available in `src-tauri/tauri.conf.json`
-
 
 ### Optional: Using another port
 
@@ -147,23 +144,24 @@ Set the Tauri devPath in `src-tauri/tauri.conf.json`:
 
 ```json
 {
-  "build": {
-	"devPath": "http://localhost:YOUR_PREFERRED_PORT"
-  }
+	"build": {
+		"devPath": "http://localhost:YOUR_PREFERRED_PORT"
+	}
 }
 ```
-
 
 ## Step 4: Optional: Add Tauri API
 
 While the previously added [Tauri CLI](https://tauri.app/v1/api/cli/) handles building and bundeling your app, the [Tauri API](https://tauri.app/v1/api/js/) adds backend functionality. This API is optional since you won't need it if you're just rendering a static website to communicate with a remote server. However, if you want access to more than a standard browser environment you will need it.
 
 Tauri API Examples:
+
 - [Call a custom command (defined in the Rust backend)](https://tauri.app/v1/api/js/modules/tauri#invoke)
 - [Access to the file system (read- and writing files)](https://tauri.app/v1/api/js/modules/fs)
 - [Read and write to the system clipboard](https://tauri.app/v1/api/js/modules/clipboard)
 
 Add the the Tauri API to your project with:
+
 ```
 npm install @tauri-apps/api
 ```
@@ -172,27 +170,27 @@ Note that in contrast to the CLI, this isn't a developer dependency because it's
 
 ### `allowlist`
 
-To improve security, Tauri only allows backend API calls that are allowlisted in `src-tauri/tauri.conf.json`. 
+To improve security, Tauri only allows backend API calls that are allowlisted in `src-tauri/tauri.conf.json`.
 
 For example the file system API can be allowlisted in `src-tauri/tauri.conf.json` like this:
 
 ```json
 {
-  "tauri": {
-	"allowlist": {
-	  "fs": {
-		"all": true, // enable all FS APIs
-		"readFile": true,
-		"writeFile": true,
-		"readDir": true,
-		"copyFile": true,
-		"createDir": true,
-		"removeDir": true,
-		"removeFile": true,
-		"renameFile": true
-	  }
+	"tauri": {
+		"allowlist": {
+			"fs": {
+				"all": true, // enable all FS APIs
+				"readFile": true,
+				"writeFile": true,
+				"readDir": true,
+				"copyFile": true,
+				"createDir": true,
+				"removeDir": true,
+				"removeFile": true,
+				"renameFile": true
+			}
+		}
 	}
-  }
 }
 ```
 
@@ -204,11 +202,11 @@ For example the file system API can be allowlisted in `src-tauri/tauri.conf.json
 npm run dev
 ```
 
-The first time you run the Tauri app it will generate a `Cargo.lock` file. It's purpose is *"to describe the state of the world at the time of a successful build"* and you should add it to your version control ([source](https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries)).
+The first time you run the Tauri app it will generate a `Cargo.lock` file. It's purpose is _"to describe the state of the world at the time of a successful build"_ and you should add it to your version control ([source](https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries)).
 
 ### Build Tauri app
 
-To build your Tauri app you must specify its identifier in reverse domain name notation (e.g. `com.tauri.my-tauri-app`). This string must be unique across applications and contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). 
+To build your Tauri app you must specify its identifier in reverse domain name notation (e.g. `com.tauri.my-tauri-app`). This string must be unique across applications and contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.).
 
 Set your application identifier in `src-tauri/tauri.conf.json`:
 
