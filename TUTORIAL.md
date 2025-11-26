@@ -76,8 +76,8 @@ Add the following SvelteKit scripts to your `package.json`:
 ```json
 {
 	"scripts": {
-		"sveltekit:dev": "svelte-kit dev",
-		"sveltekit:build": "svelte-kit build"
+		"sveltekit:dev": "vite dev",
+		"sveltekit:build": "vite build"
 	}
 }
 ```
